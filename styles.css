@@ -10,3 +10,14 @@ body {
 #gameCanvas {
     border: 1px solid #000;
 }
+
+#startButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}

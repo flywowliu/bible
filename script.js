@@ -33,6 +33,16 @@ let score = 0;
 // 控制蛇的移动方向
 let d;
 
+// 初始化游戏状态，添加开始按钮
+let gameStarted = false;
+const startButton = document.getElementById('startButton');
+startButton.addEventListener('click', function() {
+    if (!gameStarted) {
+        gameStarted = true;
+        game = setInterval(draw, difficultyLevels[currentDifficulty]);
+    }
+});
+
 // 监听键盘事件
 document.addEventListener('keydown', direction);
 
@@ -78,6 +88,31 @@ function collision(head, array) {
 }
 
 // 绘制游戏元素
+// 获取重新开始按钮
+const restartButton = document.getElementById('restartButton');
+
+// 添加重新开始按钮点击事件
+restartButton.addEventListener('click', function() {
+    // 重置游戏状态
+    snake = [{
+        x: 9 * box,
+        y: 10 * box
+    }];
+    score = 0;
+    d = undefined;
+    food = {
+        x: Math.floor(Math.random() * 15 + 1) * box,
+        y: Math.floor(Math.random() * 15 + 1) * box
+    };
+    restartButton.style.display = 'none';
+    if (!gameStarted) {
+        gameStarted = true;
+    }
+    clearInterval(game);
+    game = setInterval(draw, difficultyLevels[currentDifficulty]);
+});
+
+// 修改游戏结束逻辑，显示重新开始按钮
 function draw() {
     // 绘制背景
     ctx.fillStyle = '#f0f0f0';
@@ -126,6 +161,7 @@ function draw() {
     // 检查游戏是否结束
     if (snakeX < 0 || snakeX >= canvasSize || snakeY < 0 || snakeY >= canvasSize || collision(newHead, snake)) {
         clearInterval(game);
+        restartButton.style.display = 'block';
     }
 
     // 将新的蛇头添加到蛇的数组中
@@ -138,4 +174,6 @@ function draw() {
 }
 
 // 游戏主循环
-let game = setInterval(draw, difficultyLevels[currentDifficulty]);
+if (gameStarted) {
+    let game = setInterval(draw, difficultyLevels[currentDifficulty]);
+}
